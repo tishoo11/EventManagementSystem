@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleUI\Program.cs" />
+    <Compile Include="Domain\Entities\Event.cs" />
     <Compile Include="Domain\Enums\TicketCategory.cs" />
     <Compile Include="Domain\ValueObjects\Money.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -53,7 +54,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Application\" />
-    <Folder Include="Domain\Entities\" />
     <Folder Include="Infrastructure\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
