@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="ConsoleUI\Program.cs" />
     <Compile Include="Domain\Entities\Event.cs" />
+    <Compile Include="Domain\Entities\Ticket.cs" />
     <Compile Include="Domain\Enums\TicketCategory.cs" />
     <Compile Include="Domain\ValueObjects\Money.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
