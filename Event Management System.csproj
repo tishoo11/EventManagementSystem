@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleUI\Program.cs" />
+    <Compile Include="Domain\Entities\Attendee.cs" />
     <Compile Include="Domain\Entities\Event.cs" />
     <Compile Include="Domain\Entities\Ticket.cs" />
     <Compile Include="Domain\Enums\TicketCategory.cs" />
