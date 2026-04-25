@@ -133,5 +133,23 @@ namespace EventManagement.Application
                 Console.WriteLine($"- {t.AttendeeId} (Код: {t.Code})");
             }
         }
+
+        // 19. Предстоящи събития
+        public void PrintUpcoming()
+        {
+            var events = _repo.GetEvents().Where(x => x.Date >= DateTime.Now).OrderBy(x => x.Date);
+            foreach (var e in events) Console.WriteLine($"[{e.Id}] {e.Name} - {e.Date.ToShortDateString()}");
+        }
+
+        // 20. Най-посещавани
+        public void PrintPopular()
+        {
+            var events = _repo.GetEvents();
+            foreach (var e in events)
+            {
+                int count = _repo.GetTickets().Count(t => t.EventId == e.Id && t.IsValid);
+                Console.WriteLine($"{e.Name} -> {count} продадени билета");
+            }
+        }
     }
 }
