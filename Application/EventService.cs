@@ -53,5 +53,33 @@ namespace EventManagement.Application
 
         // 6. Филтриране по тип
         public List<Event> FilterByType(string t) => _repo.GetEvents().Where(x => x.EventType.ToLower() == t.ToLower()).ToList();
+
+        // 8. Проверка за капацитет
+        public int GetFreeSpots(int eventId)
+        {
+            var ev = _repo.GetEvents().FirstOrDefault(x => x.Id == eventId);
+            if (ev == null) return 0;
+            int taken = _repo.GetTickets().Count(t => t.EventId == eventId && t.IsValid);
+            return ev.Capacity - taken;
+        }
+
+        // 9 & 11. Регистрация и Генериране на билет
+        public void RegisterAttendee(int eventId, string attendeeName)
+        {
+            if (GetFreeSpots(eventId) <= 0) { Console.WriteLine("Няма свободни места!"); return; }
+            var tickets = _repo.GetTickets();
+            string code = "TICK" + new Random().Next(1000, 9999);
+            tickets.Add(new Ticket { Id = tickets.Count + 1, EventId = eventId, AttendeeName = attendeeName, Code = code, Category = TicketCategory.Standard, IsValid = true });
+            _repo.SaveTickets(tickets);
+            Console.WriteLine($"Успешна регистрация! Код: {code}");
+        }
+
+        // 10. Отмяна
+        public void CancelRegistration(string code)
+        {
+            var tickets = _repo.GetTickets();
+            var t = tickets.FirstOrDefault(x => x.Code == code);
+            if (t != null) { t.IsValid = false; _repo.SaveTickets(tickets); Console.WriteLine("Отменена!"); }
+        }
     }
 }
