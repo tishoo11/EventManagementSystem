@@ -14,5 +14,7 @@ namespace Event_Management_System.Application
         List<string> GetLocations(); void SaveLocations(List<string> list);
         List<Organizer> GetOrganizers(); void SaveOrganizers(List<Organizer> list);
         List<TicketType> GetTicketTypes(); void SaveTicketTypes(List<TicketType> list);
+        List<Attendee> GetAttendees();
+        void SaveAttendees(List<Attendee> list);
     }
 }

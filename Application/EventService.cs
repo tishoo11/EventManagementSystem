@@ -66,11 +66,31 @@ namespace EventManagement.Application
         // 9 & 11. Регистрация и Генериране на билет
         public void RegisterAttendee(int eventId, int attendeeId)
         {
-            if (GetFreeSpots(eventId) <= 0) { Console.WriteLine("Няма свободни места!"); return; }
+            // Проверка за свободни места (Услуга 8)
+            if (GetFreeSpots(eventId) <= 0)
+            {
+                Console.WriteLine("Няма свободни места!");
+                return;
+            }
+
             var tickets = _repo.GetTickets();
+
+            // Генериране на уникален код (Услуга 11)
             string code = "TICK" + new Random().Next(1000, 9999);
-            tickets.Add(new Ticket { Id = tickets.Count + 1, EventId = eventId, AttendeeId = attendeeId, Code = code, Category = TicketCategory.Standard, IsValid = true });
+
+            // Създаване на билета с подаденото AttendeeId
+            tickets.Add(new Ticket
+            {
+                Id = tickets.Count + 1,
+                EventId = eventId,
+                AttendeeId = attendeeId,
+                Code = code,
+                Category = TicketCategory.Standard,
+                IsValid = true
+            });
+
             _repo.SaveTickets(tickets);
+
             Console.WriteLine($"Успешна регистрация! Код: {code}");
         }
 
