@@ -110,5 +110,28 @@ namespace EventManagement.Application
             int idx = locs.IndexOf(oldName);
             if (idx != -1) { locs[idx] = newName; _repo.SaveLocations(locs); }
         }
+
+        // 16. Заетост локация
+        public void PrintLocationOccupancy(string locName)
+        {
+            var events = _repo.GetEvents().Where(x => x.LocationName == locName);
+            foreach (var e in events) Console.WriteLine($"- Заета на {e.Date.ToShortDateString()} от събитие '{e.Name}'");
+        }
+
+        // 17. Добавяне организатор
+        public void AddOrganizer(string name)
+        {
+            var orgs = _repo.GetOrganizers(); orgs.Add(new Organizer { Id = orgs.Count + 1, Name = name }); _repo.SaveOrganizers(orgs);
+        }
+
+        // 18. Участници по събитие
+        public void PrintAttendees(int eventId)
+        {
+            var tickets = _repo.GetTickets().Where(x => x.EventId == eventId && x.IsValid);
+            foreach (var t in tickets)
+            {
+                Console.WriteLine($"- {t.AttendeeId} (Код: {t.Code})");
+            }
+        }
     }
 }
