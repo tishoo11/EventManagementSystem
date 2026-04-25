@@ -148,9 +148,13 @@ namespace EventManagement.Application
         public void PrintAttendees(int eventId)
         {
             var tickets = _repo.GetTickets().Where(x => x.EventId == eventId && x.IsValid);
+            var attendees = _repo.GetAttendees();
+
             foreach (var t in tickets)
             {
-                Console.WriteLine($"- {t.AttendeeId} (Код: {t.Code})");
+                var a = attendees.FirstOrDefault(x => x.Id == t.AttendeeId);
+                string name = a != null ? a.Name : "Неизвестен";
+                Console.WriteLine($"- {name} (Код: {t.Code})");
             }
         }
 
