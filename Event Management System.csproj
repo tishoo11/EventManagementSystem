@@ -53,13 +53,13 @@
     <Compile Include="Domain\Entities\TicketType.cs" />
     <Compile Include="Domain\Enums\TicketCategory.cs" />
     <Compile Include="Domain\ValueObjects\Money.cs" />
+    <Compile Include="Infrastructure\FileEventRepository.cs" />
+    <Compile Include="Infrastructure\FileStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Infrastructure\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
