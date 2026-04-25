@@ -64,12 +64,12 @@ namespace EventManagement.Application
         }
 
         // 9 & 11. Регистрация и Генериране на билет
-        public void RegisterAttendee(int eventId, string attendeeName)
+        public void RegisterAttendee(int eventId, int attendeeId)
         {
             if (GetFreeSpots(eventId) <= 0) { Console.WriteLine("Няма свободни места!"); return; }
             var tickets = _repo.GetTickets();
             string code = "TICK" + new Random().Next(1000, 9999);
-            tickets.Add(new Ticket { Id = tickets.Count + 1, EventId = eventId, AttendeeName = attendeeName, Code = code, Category = TicketCategory.Standard, IsValid = true });
+            tickets.Add(new Ticket { Id = tickets.Count + 1, EventId = eventId, AttendeeId = attendeeId, Code = code, Category = TicketCategory.Standard, IsValid = true });
             _repo.SaveTickets(tickets);
             Console.WriteLine($"Успешна регистрация! Код: {code}");
         }
@@ -80,6 +80,35 @@ namespace EventManagement.Application
             var tickets = _repo.GetTickets();
             var t = tickets.FirstOrDefault(x => x.Code == code);
             if (t != null) { t.IsValid = false; _repo.SaveTickets(tickets); Console.WriteLine("Отменена!"); }
+        }
+
+        // 12. Валидност
+        public void CheckTicket(string code)
+        {
+            bool valid = _repo.GetTickets().Any(x => x.Code == code && x.IsValid);
+            Console.WriteLine(valid ? "Билетът е ВАЛИДЕН!" : "НЕВАЛИДЕН билет!");
+        }
+
+        // 13. Управление на типове билети
+        public void AddTicketType(string name, decimal amount)
+        {
+            var types = _repo.GetTicketTypes();
+            types.Add(new TicketType { Id = types.Count + 1, Name = name, Price = new Money { Amount = amount } });
+            _repo.SaveTicketTypes(types);
+        }
+
+        // 14. Добавяне локация
+        public void AddLocation(string name)
+        {
+            var locs = _repo.GetLocations(); locs.Add(name); _repo.SaveLocations(locs);
+        }
+
+        // 15. Редактиране локация
+        public void EditLocation(string oldName, string newName)
+        {
+            var locs = _repo.GetLocations();
+            int idx = locs.IndexOf(oldName);
+            if (idx != -1) { locs[idx] = newName; _repo.SaveLocations(locs); }
         }
     }
 }
