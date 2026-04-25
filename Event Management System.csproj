@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Application\EventService.cs" />
     <Compile Include="Application\IEventRepository.cs" />
+    <Compile Include="ConsoleUI\EventUI.cs" />
     <Compile Include="ConsoleUI\Program.cs" />
     <Compile Include="Domain\Entities\Attendee.cs" />
     <Compile Include="Domain\Entities\Event.cs" />
