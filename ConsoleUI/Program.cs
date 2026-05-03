@@ -1,15 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Event_Management_System.Application;
+using EventManagement.Application;
+using EventManagement.ConsoleUI;
+using EventManagement.Infrastructure;
 
-namespace Event_Management_System
+namespace EventManagement
 {
-    internal class Program
+    class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
+            // "Свързваме" трите слоя на архитектурата
+            IEventRepository repo = new FileEventRepository();
+            EventService service = new EventService(repo);
+            EventUI ui = new EventUI(service);
+
+            // Стартираме конзолното меню
+            ui.Run();
         }
     }
 }
