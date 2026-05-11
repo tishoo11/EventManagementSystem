@@ -1,4 +1,5 @@
 ﻿using System;
+using Event_Management_System.Domain.Entities;
 using EventManagement.Application;
 
 namespace EventManagement.ConsoleUI
@@ -53,7 +54,10 @@ namespace EventManagement.ConsoleUI
                     else if (c == "4")
                     {
                         Console.Write("Търси: "); string search = Console.ReadLine();
-                        foreach (var e in _s.SearchEvents(search)) Console.WriteLine($"{e.Id}: {e.Name}");
+                      foreach (var e in _s.SearchEvents(search))
+                      {
+                        Console.WriteLine($"{e.Id}: {e.Name}");
+                      }
                     }
                     else if (c == "5")
                     {

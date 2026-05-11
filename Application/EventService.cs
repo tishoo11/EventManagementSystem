@@ -43,6 +43,7 @@ namespace EventManagement.Application
             var events = _repo.GetEvents();
             events.RemoveAll(x => x.Id == id);
             _repo.SaveEvents(events);
+            Console.WriteLine("Събитието е изтрито!");
         }
 
         // 4. Търсене
