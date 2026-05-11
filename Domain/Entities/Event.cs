@@ -10,7 +10,7 @@ namespace Event_Management_System.Domain.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
         public string LocationName { get; set; } 
         public int Capacity { get; set; }
         public string EventType { get; set; }

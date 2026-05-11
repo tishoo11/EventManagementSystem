@@ -17,16 +17,28 @@ namespace EventManagement.Application
         public EventService(IEventRepository repo) { _repo = repo; }
 
         // 1 & 7. Създаване и Проверка за свободна локация
-        public void CreateEvent(string n, DateTime d, string l, int c, string t)
+        public void CreateEvent(string n, string d, string l, int c, string t)
         {
             var events = _repo.GetEvents();
-            if (events.Any(x => x.LocationName == l && x.Date.Date == d.Date))
+
+            if (events.Any(x => x.LocationName == l && x.Date == d))
             {
-                Console.WriteLine("Грешка: Локацията е заета за тази дата!"); return;
+                Console.WriteLine("Грешка: Локацията е заета за тази дата!");
+                return;
             }
-            events.Add(new Event { Id = events.Count + 1, Name = n, Date = d, LocationName = l, Capacity = c, EventType = t });
+
+            events.Add(new Event
+            {
+                Id = events.Count > 0 ? events.Max(x => x.Id) + 1 : 1,
+                Name = n,
+                Date = d, 
+                LocationName = l,
+                Capacity = c,
+                EventType = t
+            });
+
             _repo.SaveEvents(events);
-            Console.WriteLine("Събитието е създадено!");
+            Console.WriteLine("Събитието е създадено успешно!");
         }
 
         // 2. Редактиране
@@ -50,7 +62,12 @@ namespace EventManagement.Application
         public List<Event> SearchEvents(string name) => _repo.GetEvents().Where(x => x.Name.ToLower().Contains(name.ToLower())).ToList();
 
         // 5. Филтриране по дата
-        public List<Event> FilterByDate(DateTime d) => _repo.GetEvents().Where(x => x.Date.Date == d.Date).ToList();
+        public List<Event> FilterByDate(string searchDate)
+        {
+            return _repo.GetEvents()
+                        .Where(e => e.Date == searchDate)
+                        .ToList();
+        }
 
         // 6. Филтриране по тип
         public List<Event> FilterByType(string t) => _repo.GetEvents().Where(x => x.EventType.ToLower() == t.ToLower()).ToList();
@@ -133,10 +150,24 @@ namespace EventManagement.Application
         }
 
         // 16. Заетост локация
-        public void PrintLocationOccupancy(string locName)
+        public void ShowLocationOccupancy(string locationName)
         {
-            var events = _repo.GetEvents().Where(x => x.LocationName == locName);
-            foreach (var e in events) Console.WriteLine($"- Заета на {e.Date.ToShortDateString()} от събитие '{e.Name}'");
+            var events = _repo.GetEvents()
+                .Where(e => e.LocationName.Equals(locationName, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(e => e.Date) 
+                .ToList();
+
+            if (events.Count == 0)
+            {
+                Console.WriteLine($"Няма планирани събития за локация: {locationName}");
+                return;
+            }
+
+            Console.WriteLine($"--- График за {locationName} ---");
+            foreach (var e in events)
+            {
+                Console.WriteLine($"{e.Date} | {e.Name} ({e.EventType})");
+            }
         }
 
         // 17. Добавяне организатор
@@ -160,10 +191,19 @@ namespace EventManagement.Application
         }
 
         // 19. Предстоящи събития
-        public void PrintUpcoming()
+        public void PrintUpcomingEvents()
         {
-            var events = _repo.GetEvents().Where(x => x.Date >= DateTime.Now).OrderBy(x => x.Date);
-            foreach (var e in events) Console.WriteLine($"[{e.Id}] {e.Name} - {e.Date.ToShortDateString()}");
+            string today = DateTime.Now.ToString("yyyy-MM-dd");
+
+            var upcoming = _repo.GetEvents()
+                                .Where(e => string.Compare(e.Date, today) >= 0)
+                                .OrderBy(e => e.Date) 
+                                .ToList();
+
+            foreach (var e in upcoming)
+            {
+                Console.WriteLine($"{e.Date} - {e.Name}");
+            }
         }
 
         // 20. Най-посещавани
@@ -176,5 +216,33 @@ namespace EventManagement.Application
                 Console.WriteLine($"{e.Name} -> {count} продадени билета");
             }
         }
+
+        public void PrintLocationOccupancy(string n)
+        {
+            var events = _repo.GetEvents()
+                .Where(x => x.LocationName.Equals(n, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(x => x.Date) 
+                .ToList();
+
+            if (!events.Any()) { Console.WriteLine("Няма събития."); return; }
+
+            foreach (var e in events)
+                Console.WriteLine($"{e.Date} - {e.Name}");
+        }
+
+        public void PrintUpcoming()
+        {
+            string today = DateTime.Now.ToString("yyyy-MM-dd");
+
+            var upcoming = _repo.GetEvents()
+                .Where(x => string.Compare(x.Date, today) >= 0) // Сравняваме по азбучен ред
+                .OrderBy(x => x.Date)
+                .ToList();
+
+            foreach (var e in upcoming)
+                Console.WriteLine($"{e.Date} - {e.Name}");
+        }
     }
+
+
 }

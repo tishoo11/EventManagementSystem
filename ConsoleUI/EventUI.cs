@@ -30,16 +30,31 @@ namespace EventManagement.ConsoleUI
                     string c = Console.ReadLine();
                     if (c == "0") break;
 
-                    if (c == "1")
+                if (c == "1")
+                {
+                    Console.Write("Име: "); string n = Console.ReadLine();
+
+                    Console.Write("Дата (гггг-мм-дд): ");
+                    string inputDate = Console.ReadLine();
+                    string formattedDate;
+
+                    try
                     {
-                        Console.Write("Име: "); string n = Console.ReadLine();
-                        Console.Write("Дата (гггг-мм-дд): "); DateTime d = DateTime.Parse(Console.ReadLine());
-                        Console.Write("Име локация: "); string l = Console.ReadLine();
-                        Console.Write("Капацитет: "); int cap = int.Parse(Console.ReadLine());
-                        Console.Write("Тип: "); string t = Console.ReadLine();
-                        _s.CreateEvent(n, d, l, cap, t);
+                        formattedDate = DateTime.Parse(inputDate).ToString("yyyy-MM-dd");
                     }
-                    else if (c == "2")
+                    catch
+                    {
+                        Console.WriteLine("Невалидна дата! Използваме днешната по подразбиране.");
+                        formattedDate = DateTime.Now.ToString("yyyy-MM-dd");
+                    }
+
+                    Console.Write("Име локация: "); string l = Console.ReadLine();
+                    Console.Write("Капацитет: "); int cap = int.Parse(Console.ReadLine());
+                    Console.Write("Тип: "); string t = Console.ReadLine();
+
+                    _s.CreateEvent(n, formattedDate, l, cap, t);
+                }
+                else if (c == "2")
                     {
                         Console.Write("ID Събитие: "); int id = int.Parse(Console.ReadLine());
                         Console.Write("Ново име: "); string n = Console.ReadLine();
@@ -61,8 +76,11 @@ namespace EventManagement.ConsoleUI
                     }
                     else if (c == "5")
                     {
-                        Console.Write("Дата: "); DateTime d = DateTime.Parse(Console.ReadLine());
-                        foreach (var e in _s.FilterByDate(d)) Console.WriteLine($"{e.Name}");
+                       Console.Write("Дата (гггг-мм-дд): ");
+                       string d = DateTime.Parse(Console.ReadLine()).ToString("yyyy-MM-dd");
+
+                       foreach (var e in _s.FilterByDate(d))
+                        Console.WriteLine($"{e.Name}");
                     }
                     else if (c == "6")
                     {
