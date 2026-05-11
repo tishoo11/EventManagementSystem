@@ -1,6 +1,5 @@
 ﻿using Event_Management_System.Application;
 using Event_Management_System.Domain.Entities;
-using Event_Management_System.Domain.Entities;
 using Event_Management_System.Domain.Enums;
 using Event_Management_System.Domain.ValueObjects;
 using System;
